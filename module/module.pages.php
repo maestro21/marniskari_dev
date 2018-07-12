@@ -6,13 +6,14 @@
 			'pages' => [
 				'fields' => [
 					'pid'				=>	[ 'int', 'select', 'default' => 0, 'null' => false],
-					//'bg'				=>  [ 'string', 'text'],
+					'bg'				=>  [ null, 'file'],
 					'name' 			=> 	[ 'string', 'text', 'search' => TRUE ],
 					'url'				=>	[ 'string',	'text' ],
 					'fullurl'		=>  [ 'string', 'info' ],
 					'type'			=>	[ 'int', 'select' ],
 					'content' 	=> 	[ 'blob', 'html', 'search' => TRUE ],
 					'status'		=>	[ 'int', 'select' ],
+					'pos'				=> [ 'int', 'text',  'null' => TRUE  ],
 				],
 			],
 		];
@@ -60,8 +61,12 @@
 	function save() {
 		$this->parse = FALSE;
 		$form = $this->post['form'];
+		unset($form['bg']);
 		$form['fullurl'] = $this->getFullUrl($form['pid'], $form['url']);
 		$ret = parent :: saveDB($form);
+		if($this->files['bg']) {
+			uploadImage($this->files['bg'], 'bg/' . $this->id);
+		}
 		$this->cache();
 		return json_encode($ret);
 	}
@@ -175,10 +180,12 @@
 		}
 
 		$page = $page[0];
-		$this->title = $page['name'];
+		$this->title = ($page['pid'] < 1 ? '<img src=' . BASE_URL . tpath() . 'logo.png>' : $page['name']);
+
+		$this->checkBG($page['id']);
 
 		// strahovki specific
-		if(count($path) > 2) {
+		/*if(count($path) > 2) {
 			$page['subpages'] = $this->getSubMenu($page['pid']); //print_r($subpages);
 			$pname = q()
 						->select('name')
@@ -186,7 +193,7 @@
 						->where(qeq('id',$page['pid']))
 					->run();
 			$page['name'] = $pname[0][0];
-		}
+		} */
 		if($page['type'] == 2) redirect(strip_tags($page['content']), 0, true);
 		return $page;
 	}
@@ -196,6 +203,13 @@
 			'name' => T('404 page not found'),
 			'content' => '',
 		);
+	}
+
+	function checkBg($id) {
+			$bg = getImg('bg', $id);
+			if($bg) {
+					G('bgimg', $bg);
+			}
 	}
 
 }

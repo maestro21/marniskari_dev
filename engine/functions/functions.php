@@ -226,7 +226,7 @@ function addLabel($key) {
 
 function M($module) {
 	global $masterclass;
-	$filename = BASE_PATH . 'modules/module.' . $module . '.php';
+	$filename = BASE_PATH . 'module/module.' . $module . '.php';
 	if(file_exists($filename)) {
 		require_once(BASE_PATH .'engine/class.masterclass.php');
 		require_once($filename);
@@ -434,6 +434,8 @@ function getModules(){
 /** DATA fuctions **/
 const WIDGET_TEXT 		= 'text';
 const WIDGET_TEXTAREA 	= 'textarea';
+const WIDGET_MULTISTRING	= 'multistring';
+const WIDGET_MULTITEXT	= 'multitext';
 const WIDGET_HTML 		= 'html';
 const WIDGET_BBCODE 	= 'bbcode';
 const WIDGET_PASS 		= 'pass';
@@ -451,6 +453,7 @@ const WIDGET_PHONE		= 'phone';
 const WIDGET_NUMBER		= 'number';
 const WIDGET_URL		= 'url';
 const WIDGET_SLUG		= 'slug';
+const WIDGET_FILE	= 'file';
 
 const DB_TEXT 	= 'text';
 const DB_BLOB 	= 'blob';
@@ -520,6 +523,11 @@ function fType($value, $type, $options = null, $fieldname = null) {
 
 		case WIDGET_DATE:
 			return fDateTime($value);
+		break;
+
+		case WIDGET_MULTITEXT:
+		case WIDGET_MULTISTRING:
+			return unserialize($value);
 		break;
 
 		case WIDGET_CHECKBOXES:
@@ -1220,4 +1228,45 @@ function moveToBottom($arr, $key) {
 	unset($arr[$key]);
 	$arr[$key] = $v;
 	return $arr;
+}
+
+
+function uploadFile($file, $path) {
+	$tmpname = $file["tmp_name"];
+	@mkdir(dirname($path), 0755, true);
+	move_uploaded_file($tmpname, $path);
+}
+
+function uploadImage($file, $path, $imgsize = null, $thumb = null) {
+		$tmpname = $file["tmp_name"];
+		$type = explode('/',$file['type']);
+		if($type[0] != 'image') {
+				return null;
+		}
+		$type = $type[1];
+		$path = BASEFMDIR . $path . '.' . $type;
+
+		uploadFile($file, $path);
+
+		if(is_array($imgsize)) {
+				createthumb($path, $path, $imgsize[0], $imgsize[1], $type);
+		}
+		if($thumbpath && is_array($thumbsize)) {
+				createthumb($path, $thumbpath, $thumbsize[0], $thumbsize[1], $type);
+		}
+}
+
+function getImg($path, $id) {
+	$types = ['jpeg', 'jpg', 'gif', 'png'];
+	foreach($types as $type) {
+			if(file_exists(BASEFMDIR . $path . '/' . $id . '.' . $type)) {
+					return BASEFMURL . $path . '/' . $id . '.' . $type;
+			}
+		}
+		return null;
+}
+
+
+function bgImg() {
+		return G('bgimg');
 }

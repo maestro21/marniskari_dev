@@ -1,4 +1,9 @@
 /** Forms **/
+input[type="file"] {
+    color: white;
+    border: none;
+}
+
 select,
 input {
 	width: 300px;

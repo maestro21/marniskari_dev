@@ -3,7 +3,7 @@
 	<head>
 		<?php echo tpl('header', array('class' => $class)); ?>
 	</head>
-	<body<?php if(superAdmin()) echo ' class="admin"';?>>
+	<body<?php if(superAdmin()) echo ' class="admin"';?> style="background-image:url(<?php print_r(G('bgimg')); ?>)">
 	<?php if(superAdmin()) echo tpl('adminpanel'); ?>
 	<div class="page-wrapper">
 		<div class="header">

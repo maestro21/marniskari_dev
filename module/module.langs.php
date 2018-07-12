@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 class langs extends masterclass {
-	
-	
+
+
 function gettables() {
 		return
 		[
@@ -10,19 +10,19 @@ function gettables() {
 				'fields' => [
 					'abbr' 			=> [ 'string', 'text', 'search' => TRUE ],
 					'name' 			=> [ 'string', 'text', 'null' => TRUE  ],
-					'website'		=> [ 'string', 'url',  'null' => TRUE  ],
+					'pos'				=> [ 'int', 'text',  'null' => TRUE  ],
 					'active'		=> [ 'bool', 'checkbox', 'null' => TRUE ],
 				],
 				'idx' => [
 					'abbr' => [ 'abbr' ],
 				]
 			],
-		];	
+		];
 	}
-	
+
 	    /** Save element **/
     public function save() {  //die();
-		$this->parse = FALSE; 
+		$this->parse = FALSE;
 		$ret = $this->saveDB($this->post['form']);
 		$this->cache();
 		return json_encode($ret);

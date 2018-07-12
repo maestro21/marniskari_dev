@@ -1,19 +1,29 @@
-<?php include('autoload.php');
+<?php error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('log_errors', '1');
+include('autoload.php');
 
-/** uncomment if you want to make your website completely private **/
-/** if(!checkLogged()) redirect(BASE_URL . 'login.php'); /**/
+try {
 
-$_PATH = route();
+	/** uncomment if you want to make your website completely private **/
+	/** if(!checkLogged()) redirect(BASE_URL . 'login.php'); /**/
 
-$class = dispatch();
+	G('bgimg', BASE_URL . 'data/img/bg.jpg');
+	$_PATH = route();
 
-/** output **/
-if($class->ajax)
-	echo $class->output;
-else
-	echo tpl('main', array(
-		'title' => $class->title,
-		'content' 	=> $class->output,
-		'class'		=> $class
-		)
-	);
+	$class = dispatch();
+
+	/** output **/
+	if($class->ajax)
+		echo $class->output;
+	else
+		echo tpl('main', array(
+			'title' => $class->title,
+			'content' 	=> $class->output,
+			'class'		=> $class
+			)
+		);
+
+} catch(Throwable $t) {
+	echo $t->getMessage(); die();
+}

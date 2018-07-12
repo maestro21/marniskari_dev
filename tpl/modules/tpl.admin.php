@@ -1,7 +1,7 @@
 <br>
 <h1><?php echo $title;?>
 <?php echo drawBtns($buttons['admin']);?></h1>
-<?php 
+<?php
 $statuses = ['not','far','ok'];
 $statustexts = ['not installed','installed','activated'];
  foreach (@$data as $module){ ?>
@@ -14,19 +14,19 @@ $statustexts = ['not installed','installed','activated'];
 			<?php echo T($statustexts[$module['status']]);?>
 		</div>
 		<div class="btns td">
-			<?php switch($module['status']) { 
+			<?php switch($module['status']) {
 					//Not installed
 					case 0:?>
 						<a class="btn btn-active" href="javascript:changestatus('<?php echo $module['name'];?>', 1);"><?php echo T('Install');?></a>
 			<?php  	break;
-			
+
 					//Installed, not activated
-					case 1:?>						
+					case 1:?>
 						<a class="btn btn-ok" href="javascript:changestatus('<?php echo $module['name'];?>', 2);"><?php echo T('Activate');?></a>
 						<a class="btn btn-del" href="javascript:changestatus('<?php echo $module['name'];?>', 0);"><?php echo T('Uninstall');?></a>
 			<?php	break;
 
-					case 2: ?>						
+					case 2: ?>
 						<a class="btn" href="javascript:changestatus('<?php echo $module['name'];?>', 1);"><?php echo T('Deactivate');?></a>
 						<a class="btn btn-del" href="javascript:changestatus('<?php echo $module['name'];?>', 0);"><?php echo T('Uninstall');?></a>
 			<?php  } ?>
@@ -39,7 +39,7 @@ $statustexts = ['not installed','installed','activated'];
 function changestatus(module, status_id) {
 	$.get('<?php echo BASE_URL;?>modules/changestatus/' + module + '?ajax=1&status=' + status_id)
 		.done(function() {
-			window.location.reload(0);	
+		//	window.location.reload(0);	
 	});
 }
 

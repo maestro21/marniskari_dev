@@ -13,7 +13,7 @@
 }
 
 body {
-	background-image:url('<?php echo BASE_URL . 'data/img/bg.jpg';?>');
+	background-image:url('<?php echo bgImg(); ?>');
 	background-position:center;
 	background-size: cover;
 	background-attachment: fixed;
@@ -1582,4 +1582,52 @@ border: 0.5px  rgba(255,255,255,0.5) solid !important;
 .contacttext td {
 	padding-left: 20px;
   padding-right: 0;
+}
+
+
+.productlist div,
+.productcategories div {
+  display: inline-flex;
+  margin: 10px 20px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.productlist td {
+  text-align:left;
+}
+
+.productlist .btn {
+  margin: 0;
+}
+
+.productlist * {
+  color: white;
+}
+
+
+.productcategories div:hover {
+  opacity: 1;
+}
+
+.productcategories div .img {
+  border: 1px white solid;
+}
+
+
+.productlist img {
+  height: 250px;
+  width: 65px;
+}
+
+
+.galleries div {
+    display: inline-block !important;
+    width: auto;
+    margin: 10px;
+}
+
+.galleries h3 {
+  margin: 0;
+    color: white;
 }

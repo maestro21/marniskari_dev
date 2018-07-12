@@ -176,7 +176,8 @@ abstract class masterclass{
 		/* preprocess data */
 		$f = $this->fields;
 		foreach($this->fields as $k => $v) {
-			$data[$k] = sqlFormat($f[$k][1], @$data[$k]);
+			if($v[0] == null) continue;
+			$data[$k] = sqlFormat($v[0], @$data[$k]);
 		}
 		/* Determines query type;
 		Update if element exists, insert if it`s a new element **/

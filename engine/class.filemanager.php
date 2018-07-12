@@ -1,4 +1,4 @@
-<?php 
+<?php
 define('THUMB_PREFIX', 'thumb_');
 define('FMPATH', 'data/uploads/');
 define('BASEFMDIR', BASE_PATH . FMPATH);
@@ -6,12 +6,12 @@ define('BASEFMURL', BASE_URL . FMPATH);
 
 
 class filemanager {
-	
-	
-	
-	
-	
-	function dloop($path = '') {		
+
+
+
+
+
+	function dloop($path = '') {
 		$dirs = array();
 		$_dirs = scandir(BASEFMDIR . $path);
 		$_dirs = array_diff($_dirs, array('.', '..'));
@@ -23,14 +23,14 @@ class filemanager {
 		}
 		return $dirs;
 	}
-	
-	
-	public function dscan($path) {
+
+
+	public function dscan($path) { 
 		if(!file_exists($path)) return FALSE;
-		
-		$files = scandir($path); 	
+
+		$files = scandir($path);
 		if(!$files) return FALSE;
-		
+
 		$files = array_diff($files, array('.', '..'));
 		$_dirs = array();
 		$_files = array();
@@ -39,59 +39,59 @@ class filemanager {
 			$_finfo = $this->finfo($_fpath);
 			if($_finfo['is_dir']) {
 				$_dirs[] = $_finfo;
-			} else { 
+			} else {
 				$_files[] = $_finfo;
 			}
-		}		
+		}
 		$result = array_merge($_dirs, $_files);
-		
+
 		return $result;
-	}	
-	
+	}
+
 	public function fmk($path){
 		if(file_exists($path)) return FALSE;
 		$ret = fopen($path, 'w');
 		if($ret) {
-			return fclose($ret);			
+			return fclose($ret);
 		}
 		return FALSE;
 	}
-	
+
 	public function dmk($path, $mode = 0777, $recursive = true) {
 		return @mkdir($path, $mode, $recursive);
-	}	
-	
-	public function drm($dir) {
-		if(!file_exists($dir)) return FALSE; 
-		
-		$files = array_diff(scandir($dir), array('.','..')); 
-		foreach ($files as $file) { 
-			(is_dir("$dir/$file")) ? $this->drm("$dir/$file") : unlink("$dir/$file"); 
-		} 
-		return rmdir($dir);  
 	}
-		
+
+	public function drm($dir) {
+		if(!file_exists($dir)) return FALSE;
+
+		$files = array_diff(scandir($dir), array('.','..'));
+		foreach ($files as $file) {
+			(is_dir("$dir/$file")) ? $this->drm("$dir/$file") : unlink("$dir/$file");
+		}
+		return rmdir($dir);
+	}
+
 	public function fdrm($path) {
 		if(!file_exists($path)) return FALSE;
 		if(is_dir($path)) $this->drm($path); else $this->fdel($path);
 	}
-	
+
 	public function fdel($path) {
 		if(!file_exists($path)) return FALSE;
 		unlink($path);
 		$thumb = dirname($path) . '/' . THUMB_PREFIX . basename($path);
 		if(file_exists($thumb)) unlink($thumb);
 	}
-	
+
 	public function fsave($path, $contents){
-		return file_put_contents($path, $contents);	
+		return file_put_contents($path, $contents);
 	}
-	
+
 	public function finfo($path){
 		if(!file_exists($path)) return FALSE;
-		
-		$_finfo = array();			
-		$_finfo['name'] = basename($path);			
+
+		$_finfo = array();
+		$_finfo['name'] = basename($path);
 		$_finfo['filemtime'] = filemtime($path);
 		$_finfo['filectime'] = filemtime($path);
 		if(is_dir($path)) {
@@ -105,18 +105,18 @@ class filemanager {
 			$_finfo['size'] = filesize($path);
 			$_finfo['is_dir'] = false;
 		}
-		
+
 		return $_finfo;
 	}
-	
+
 	public function frn($path, $path2) {
 		return rename($path, $path2);
 	}
-	
+
 	public function fcopy($path, $path2) {
 		return copy($path, $path2);
 	}
-	
+
 	public function fupload($file, $path, $thumbpath) {
 		global $_FILES;
 		if(empty($_FILES) || !file_exists($_FILES[$file]["tmp_name"])) return FALSE;

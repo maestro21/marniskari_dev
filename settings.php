@@ -24,7 +24,7 @@ define('SITE_PATH', BASE_PATH . 'marniskari_dev/');
 define('BASE_FOLDER', '');
 define('PUB_FOLDER', BASE_FOLDER . 'front/');
 define('TPL_FOLDER',  BASE_FOLDER . 'tpl/');
-define('CLASS_FOLDER',  BASE_FOLDER . 'modules/');
+define('CLASS_FOLDER',  BASE_FOLDER . 'module/');
 define('DATA_FOLDER',  BASE_FOLDER . 'data/');
 define('EXT_FOLDER',  BASE_FOLDER . 'external/');
 define('THEME_FOLDER',  BASE_FOLDER . 'themes/');

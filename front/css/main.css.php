@@ -230,3 +230,9 @@ a {
     border: 1px black solid;
     display: inline-block;
 }
+
+
+.thumb {
+		max-width: 200px;
+		max-height: 200px;
+}

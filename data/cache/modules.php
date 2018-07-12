@@ -23,6 +23,17 @@
   ),
   2 => 
   array (
+    'name' => 'galleries',
+    0 => 'galleries',
+    'description' => '',
+    1 => '',
+    'status' => '2',
+    2 => '2',
+    'id' => '14',
+    3 => '14',
+  ),
+  3 => 
+  array (
     'name' => 'i18n',
     0 => 'i18n',
     'description' => '',
@@ -32,7 +43,7 @@
     'id' => '1',
     3 => '1',
   ),
-  3 => 
+  4 => 
   array (
     'name' => 'langs',
     0 => 'langs',
@@ -43,7 +54,7 @@
     'id' => '8',
     3 => '8',
   ),
-  4 => 
+  5 => 
   array (
     'name' => 'modules',
     0 => 'modules',
@@ -54,7 +65,7 @@
     'id' => '2',
     3 => '2',
   ),
-  5 => 
+  6 => 
   array (
     'name' => 'pages',
     0 => 'pages',
@@ -65,7 +76,29 @@
     'id' => '3',
     3 => '3',
   ),
-  6 => 
+  7 => 
+  array (
+    'name' => 'productcategories',
+    0 => 'productcategories',
+    'description' => '',
+    1 => '',
+    'status' => '2',
+    2 => '2',
+    'id' => '13',
+    3 => '13',
+  ),
+  8 => 
+  array (
+    'name' => 'products',
+    0 => 'products',
+    'description' => '',
+    1 => '',
+    'status' => '2',
+    2 => '2',
+    'id' => '12',
+    3 => '12',
+  ),
+  9 => 
   array (
     'name' => 'system',
     0 => 'system',
