@@ -9,9 +9,9 @@
 		<div class="header">
 			<div class="menu wrap">
 
-				<div class="logo">
-					<img src="<?php echo PUB_URL ?>img/logo.png" height="50">
-				</div>
+
+					<img src="<?php echo BASE_URL . tpath(); ?>logo.png" height="50">
+				
                  <a href="<?php echo BASE_URL . getlang();?>" class="fa fa-home"></a>
 				<a class="hamburger" href="#"><?php echo T('menu');?> &#9776;</a>
 				<div class="dropdownmenu">

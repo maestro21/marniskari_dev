@@ -3,10 +3,10 @@ class i18n extends masterclass {
 
 	function gettables() {}
 
-	
+
 	function extend() {
 		$this->description = 'Core module for internationalization';
-		
+
 		$this->options = [
 			'type' => [
 				1 => WIDGET_TEXT,
@@ -15,26 +15,26 @@ class i18n extends masterclass {
 			],
 		];
 		/* fields */
-		$this->fields = [					
-					'label'			=>	[ 'string', 'text', 'search' => TRUE,],	
-					'type'			=>	[ 'int', 'select' ],						
+		$this->fields = [
+					'label'			=>	[ 'string', 'text', 'search' => TRUE,],
+					'type'			=>	[ 'int', 'select' ],
 				];
-		$langs = getLangs();		
+		$langs = getLangs();
 		foreach($langs as $lang) {
 			$this->fields[$lang['abbr']] = [ 'string', 'text'];
 		}
-		
-		
+
+
 		$this->data = cache('i18n');
-		
+
 	}
 
-	
+
 	function items() {}
 	function del() {}
 	function add() {}
 	function edit() {}
-	
+
 	/**
 		Admin method for class data listing
 		@return array() or FALSE;
@@ -44,34 +44,35 @@ class i18n extends masterclass {
 			return $this->data;
 		}
 		return FALSE;
-	}	
-	
-	
+	}
+
+
 	public function save() {
+		if(!superAdmin()) return;
 		$this->ajax =true;
 		$data = array();
 		$langs = getLangs();
 		foreach($this->post['form']['fields'] as $row) {
 			if($row['type'] == 3) {
-				$langs = getLangs();		
+				$langs = getLangs();
 				foreach($langs as $lang) {
 					$row[$lang['abbr']] = strToKeyValues($row[$lang['abbr']]);
-				}	
+				}
 			}
 			$data[$row['label']] = $row;
-		}	
+		}
 		ksort($data, SORT_FLAG_CASE);
 		$this->cache($data);
-		
-		echo json_encode(array('message' => T('saved'), 'status' => 'ok'));	die();	
-	}
-	
 
-	
+		echo json_encode(array('message' => T('saved'), 'status' => 'ok'));	die();
+	}
+
+
+
 	function addField($key = '{key}', $data = null) {
-		$this->ajax = true;	
-		
-		
+		$this->ajax = true;
+
+
 		return tpl('i18n/field', array(
 			'key' 		=> $key,
 			'fields' 	=> $this->fields,
@@ -79,5 +80,5 @@ class i18n extends masterclass {
 			'data' 		=> $data)
 		);
 	}
-	
+
 }

@@ -27,9 +27,12 @@
 			uploadImage($this->files['logo'], 'productcategories/logo/' . $this->id);
 		}
     if($this->files['img']) {
-      uploadImage($this->files['img'], 'productcategories/img/' . $this->id);
+      uploadImage($this->files['img'], 'productcategories/img/' . $this->id, [270, 170]);
     }
 		return json_encode($ret);
 	}
 
+  function tags() {
+    return $this->items();
+  }
 }

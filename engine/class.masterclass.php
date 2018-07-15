@@ -167,6 +167,7 @@ abstract class masterclass{
 
     /** Save element **/
     public function save() {  //die();
+			if(!superAdmin()) return;
 		$this->parse = FALSE;
 		$ret = $this->saveDB($this->post['form']);
 		return json_encode($ret);
@@ -199,6 +200,7 @@ abstract class masterclass{
 
     /** Delete element **/
     public function del($id = NULL) {
+			if(!superAdmin()) return;
 		if(NULL == $id) $id = $this->id;
 		q($this->cl)->qdel($id)->run();
 		$this->parse = FALSE;

@@ -46,6 +46,7 @@ class products extends masterclass  {
   }
 
   function save() {
+    if(!superAdmin()) return;
 		$this->parse = FALSE;
 		$form = $this->post['form'];
 		$ret = parent :: saveDB($form);

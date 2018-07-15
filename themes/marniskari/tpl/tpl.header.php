@@ -21,3 +21,4 @@
 <script src="<?php echo BASE_URL . EXT_FOLDER;?>tinymce/tinymce.min.js" type="text/javascript"></script>
 <script src="<?php echo BASE_URL . EXT_FOLDER;?>dropzone/dropzone.js" type="text/javascript"></script>
 <script src="<?php echo BASE_URL . EXT_FOLDER;?>slider/better-simple-slideshow.min.js"></script>
+<script src="<?php echo BASE_URL . EXT_FOLDER;?>jquery.tagcanvas.min.js"></script>

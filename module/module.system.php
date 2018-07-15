@@ -12,19 +12,20 @@
 					'name' => [ 'name' ],
 				]
 			],
-		];	
+		];
 	}
-	
+
 	function logout() {
-		global $_SESSION; 
+		global $_SESSION;
 		unset($_SESSION['user']);
-		redirect(BASE_URL);		
+		redirect(BASE_URL);
 	}
-	
-	
-	function install() { 
-		parent :: install();		
-		include('data/default.globals.php'); 
+
+
+	function install() {
+		if(!superAdmin()) return;
+		parent :: install();
+		include('data/default.globals.php');
 		foreach($globals as $k => $v) {
 			$item = array(
 				'name'		=> $k,
@@ -34,59 +35,61 @@
 			q($this->cl)->qadd($item)->run();
 		}
 	}
-	
-	
+
+
 	function set($key, $value) {
 		$this->id = q($this)->select('id')->where(qEq('name',$key))->run(MySQL::DBCELL);
 		$this->saveDB(array('name' => $key, 'value' => $value));
-		$this->cache();	
+		$this->cache();
 	}
-	
+
 	function save() {
+		if(!superAdmin()) return;
 		$ret = parent:: save();
 		$this->cache();
-		return $ret;		
+		return $ret;
 	}
-	
+
 	function delete() {
+		if(!superAdmin()) return;
 		parent::delete();
-		$this->cache();	
+		$this->cache();
 	}
-	
+
 	function extend() {
-		$this->description = 'Core module for setting up global settings';	
+		$this->description = 'Core module for setting up global settings';
 		/*$this->buttons = array(
 			'admin' => array( 'add' => 'fa-plus', 'langs' => 'languages', 'themes' => 'themes' ),
 			'table' => array( 'item/{id}' => 'edit',  'view/{id}' => 'view', ),
 		); */
 	}
-	
+
 	function cache($data = NULL) {
-		$cache 	= array();		
+		$cache 	= array();
 		$data 	= q($this->cl)->qlist()->run();
 		foreach($data as $row){
 			$cache[$row['name']] = $row['value'];
 		}
 		cache($this->className, $cache);
 	}
-	
-	function login() { 
+
+	function login() {
 		if(superAdmin()) redirect(BASE_URL);
-	
-		if($this->post) { 
+
+		if($this->post) {
 			$this->ajax = true;
-			if(md5($_POST['pass']) == ADM_PASS){;	
-				session('user', true);				
+			if(md5($_POST['pass']) == ADM_PASS){;
+				session('user', true);
 				echo json_encode(array('message' => T('success'), 'status' => 'ok', 'redirect' => BASE_URL));  die();
 			}
 			echo json_encode(array('message' => T('wrong pass'), 'status' => 'error', 'redirect' => BASE_URL));  die();
 		}
 	}
-	
-	
+
+
 	function langs() {
-		
-	
-	}	
-	
+
+
+	}
+
 }

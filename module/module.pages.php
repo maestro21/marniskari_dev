@@ -39,6 +39,7 @@
 	}
 
 	function install() {
+		if(!superAdmin()) return;
 		parent :: install();
 		include('data/default.pages.php');
 		foreach($pages as $page) {
@@ -53,12 +54,14 @@
 
 
 	function del($id = NULL) {
+		if(!superAdmin()) return;
 		$ret = parent::del($id = NULL);
 		$this->cache();
 		return $ret;
 	}
 
 	function save() {
+		if(!superAdmin()) return;
 		$this->parse = FALSE;
 		$form = $this->post['form'];
 		unset($form['bg']);
@@ -119,6 +122,7 @@
 	}
 
 	function admin() {
+		if(!superAdmin()) return;
 		$T = $this->getPageTree();
 		$ret = $T->drawTree($this->className . '/adm');
 		return $ret;

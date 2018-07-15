@@ -21,7 +21,8 @@ function gettables() {
 	}
 
 	    /** Save element **/
-    public function save() {  //die();
+	public function save() {  //die();
+		if(!superAdmin()) return;
 		$this->parse = FALSE;
 		$ret = $this->saveDB($this->post['form']);
 		$this->cache();

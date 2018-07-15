@@ -28,11 +28,12 @@ body {
     border-radius: 5px;
 }
 
+/*
 .logo img {
 	content:url(<?php echo BASE_URL . tpath(); ?>logo.png);
 	padding:0;
 	margin: 0;
-}
+} */
 .submenu ul {
 	padding-left: 0;
 }
@@ -1625,9 +1626,75 @@ border: 0.5px  rgba(255,255,255,0.5) solid !important;
     display: inline-block !important;
     width: auto;
     margin: 10px;
+    opacity: 0.8;
+}
+
+.galleries img {
+
+  border: 1px white solid;
 }
 
 .galleries h3 {
   margin: 0;
     color: white;
+}
+
+
+.gallery div {
+    width: 341px;
+    height: 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block;
+    margin: 10px;
+    opacity: 0.8;
+    border: 1px white solid;
+}
+
+.galleries div:hover,
+.gallery div:hover {
+  opacity: 1;
+  cursor:pointer;
+}
+
+
+.gallery .admBtns{
+  float: right;
+  margin-top: -15px;
+  margin-right: -15px;
+}
+
+.admBtns .fa.icon {
+  border-color: white;
+  background-color: black;
+}
+
+.admBtns .fa.icon:hover {
+  color: black;
+  background-color: white;
+}
+
+
+.gallery h3 {
+    margin: 0;
+    padding-top: 150px;
+}
+
+.gallery h3 p {
+      margin: 0;
+    line-height: 50px;
+    text-align: center;
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+    font-size: 30px;
+}
+
+.productcategories {
+      text-align: center;
+}
+
+.productcategories p.admBtns {
+    position: absolute;
+    margin-top: -10px;
 }

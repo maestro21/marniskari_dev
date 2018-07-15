@@ -1,5 +1,5 @@
 <?php
-  $description =   unserialize($data['description'])[getlang()];
+  $description =   unserialize($data['description'])[getlang()]; 
  ?>
 <table>
   <tr>
@@ -8,8 +8,8 @@
     </td>
     <td>
       <p><?php echo $description;?></p>
-      <p><?php echo T('alch') . ': ' . $row['alchohol'];?><br>
-         <?php echo T('esize') . ': ' . $row['size'];?>
+      <p><?php echo T('alch') . ': ' . $data['alchohol'];?><br>
+         <?php echo T('esize') . ': ' . $data['size'];?>
       </p>
     </td>
   </tr>

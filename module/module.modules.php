@@ -29,6 +29,7 @@
 
 
 	function reinstall() {
+		if(!superAdmin()) return;
 		$this->install();
 		$modules = $this->getModules();
 		foreach($modules as $module) {
@@ -40,6 +41,7 @@
 
 
 	function getModules() {
+		if(!superAdmin()) return;
 		$modules = scandir(CLASS_FOLDER);
 		unset($modules[0]);
 		unset($modules[1]);
@@ -50,6 +52,7 @@
 	}
 
 	function admin() {
+		if(!superAdmin()) return;
 		if(hasRight($this->rights['admin'])) {
 			/** getting items from db **/
 			$items = q($this)
@@ -109,6 +112,7 @@
 
 
 	function changestatus() {
+		if(!superAdmin()) return;
 		$status = $this->get['status'];
 		$MName = $this->id;
 		q()

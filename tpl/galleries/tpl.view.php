@@ -1,7 +1,7 @@
-<!--<h3><?php echo T('upload image');?></h3>
-<?php $formid = $class . '_form_item_' . $id;?>
+<?php if(superAdmin()) { ?>
+	<h3><?php echo T('upload image');?></h3>
 <form method="POST" id="form" action="<?php echo BASE_URL . $class;?>/uploadImage?ajax=1">
-<input type="hidden" name="id" id="id" value="<?php echo $id;?>">
+<input type="hidden" name="id"  value="<?php echo $id;?>">
 	<table cellpadding=0 cellspacing=0>
 	<?php
 		echo drawForm([ 'img' => [ null, 'file', 'path' => 'galleries/' . $id]]);
@@ -14,9 +14,11 @@
 		</tr>
 	</table>
 </form>
--->
-
-
-<?php foreach($data['images'] as $img) { ?>
-
+<hr></hr>
 <?php } ?>
+
+<div class=gallery>
+<?php foreach($data['images'] as $img) { ?>
+      <div class="img" style="background-image:url('<?php echo BASEFMURL . 'galleries/' . $id . '/' . $img['name'];?>');"></div>
+<?php } ?>
+</div>

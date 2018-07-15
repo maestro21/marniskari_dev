@@ -1251,8 +1251,9 @@ function uploadImage($file, $path, $imgsize = null, $thumb = null) {
 		if(is_array($imgsize)) {
 				createthumb($path, $path, $imgsize[0], $imgsize[1], $type);
 		}
-		if($thumbpath && is_array($thumbsize)) {
-				createthumb($path, $thumbpath, $thumbsize[0], $thumbsize[1], $type);
+		if($thumb) {
+				$thumbpath = BASEFMDIR .  $thumb['path'] . '.' . $type;
+				createthumb($path, $thumbpath, $thumb['x'], $thumb['y'], $type);
 		}
 }
 

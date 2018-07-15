@@ -25,5 +25,7 @@ try {
 		);
 
 } catch(Throwable $t) {
-	echo $t->getMessage(); die();
+	echo $t->getMessage();
+	debug_print_backtrace() ;
+	 die();
 }
