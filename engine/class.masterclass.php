@@ -191,9 +191,8 @@ abstract class masterclass{
 		$oQuery->run();
 		if($this->id < 1) {
 			$this->id = DBinsertId();
-			return array('redirect' => BASE_URL . $this->cl . '/edit/' . $this->id, 'id' => $this->id, 'status' => 'ok');
 		}
-		return array('id' => $this->id, 'message' => T('saved'), 'status' => 'ok');
+		return array('redirect' => BASE_URL . $this->cl . '/edit/' . $this->id, 'id' => $this->id, 'status' => 'ok', 'message' => T('saved'));
 	}
 
 
@@ -257,6 +256,7 @@ function call($module, $method, $params = null) {
 	}
 
 	/** checking method **/
+
 	if(!method_exists($M, $method)) {
 		$method = $M->method = $M->defmethod;
 	}

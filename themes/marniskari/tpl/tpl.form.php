@@ -1,19 +1,18 @@
 
 <?php
-$prefix = 'form'; $id = $data["id"];
+$prefix = 'form';
 foreach($fields as $key => $field) {
 
 $widget = $field[1];
 $value = (isset($data[$key]) ? $data[$key] : "");
 $required = (@$field['required'] > 0);
 $langs = getlangs();
-
-
 ?>
 
 <tr>
 	<?php
 		switch($widget) {
+			case WIDGET_CHECKBOX: echo "<td></td><td>"; break;
 			case WIDGET_HIDDEN: break;
 
 			case WIDGET_HTML:
@@ -39,6 +38,7 @@ $langs = getlangs();
 			?>
 	 </select>
 	 	<?php break;
+
 		case WIDGET_INFO: ?>
 			<?php echo $value;?>
 			<input type="hidden"
@@ -56,7 +56,6 @@ $langs = getlangs();
 				name="<?php echo $prefix;?>[<?php echo $key;?>]"
 				id="<?php echo $key;?>"<?php if($required) echo " required";?> />
 		<?php break;
-
 		case WIDGET_MULTISTRING: $value = unserialize($value);
 			foreach($langs as $lang) { $abbr = $lang['abbr']; ?>
 			<?php echo $lang['name'];?>: <br> <input type="text"
@@ -71,9 +70,7 @@ $langs = getlangs();
 				<textarea<?php if($required) echo " required";?> cols="100" rows="10"
 					name="<?php echo $prefix;?>[<?php echo $key;?>][<?php echo $abbr;?>]"
 					id="<?php echo $key . '_' . $abbr;?>"><?php echo @$value[$abbr];?></textarea><br>
-		<?php  }
-
-		break;
+		<?php  } break;
 
 		case WIDGET_SLUG: ?>
 			<input type="text"
@@ -132,9 +129,6 @@ $langs = getlangs();
 				id="<?php echo $key;?>"><?php echo $value;?></textarea>
 		<?php break;
 
-
-
-		break;
 		case WIDGET_HTML:  ?>
 			<?php echo T($key);?>:<br>
 			<textarea<?php if($required) echo " required";?> class="html" cols="100" rows="10"
@@ -241,18 +235,29 @@ $langs = getlangs();
 		case WIDGET_DATE:
 			preg_match_all("/[[:digit:]]{2,4}/", $value, $matches);
 			$nums = $matches[0]; ?>
-			<input type="text" class="date year" name="<?php echo $prefix;?>[<?php echo $key;?>][y]"
-				value="<?php echo (isset($nums[0])?$nums[0]:date("Y"));?>" size="4">-
-			<select name="<?php echo $prefix;?>[<?php echo $key;?>][m]>">
-				<?php if(!isset($nums[1])) $nums[1] = date("m");
-				for($i=1;$i<13;$i++) { ?>
-					<option value="<?php echo $i;;?>"<?php if($i==@$nums[1]) echo ' selected="selected"';?>><?php echo T("mon_$i");?>
+			<input name="day" class="day" value="<?php echo @$nums[0];?>"> .
+			<input name="month" class="month" value="<?php echo @$nums[2];?>"> .
+			<input name="year" class="year" value="<?php echo @$nums[3];?>">
+			<?php /*?>
+			<select name="day" class="day">
+				<?php for($i=1;$i<32;$i++) { ?>
+					<option value="<?php echo $i;?>"<?php if($i==@$nums[0]) echo ' selected="selected"';?>><?php echo $i;?>
 				</option>
 				<?php } ?>
 			</select>
-			<input type="text" class="date" name=<?php echo $prefix;?>[<?php echo $key;?>][d] value="<?php echo (isset($nums[2])?$nums[2]:date("d"));?>" size=2> (YYYY-MM-DD)
-
-		<?php break;
+			<select name="month" class="month">
+				<?php for($i=1;$i<13;$i++) { ?>
+					<option value="<?php echo $i;?>"<?php if($i==@$nums[1]) echo ' selected="selected"';?>><?php echo T("mon_$i");?>
+				</option>
+				<?php } ?>
+			</select>
+			<select name="year" class="year">
+				<?php for($i = date('Y'); $i > 1920; $i--) { ?>
+					<option value="<?php echo $i;?>"<?php if($i==@$nums[2]) echo ' selected="selected"';?>><?php echo $i;?>
+				</option>
+				<?php } ?>
+			</select>
+		<?php */ break;
 
 
 		case WIDGET_TIME:
@@ -284,6 +289,16 @@ $langs = getlangs();
 
 		<?php break;
 
+		case WIDGET_FILE: ?>
+					<input type="file" id="<?php echo $key;?>" name="<?php echo $key;?>">
+				<?php  if(isset($field['path'])) {
+					$img = getImg($field['path'], $id);
+					if($img) {
+						echo "<br><img src='" . $img ."' class=thumb>";
+					}
+				}
+				break;
+
 		case WIDGET_CHECKBOXES:
 			$i = 0;
 			$dat = array_flip(explode(",",@$data[$key]));?>
@@ -299,20 +314,18 @@ $langs = getlangs();
 			</div>
 		<?php break;
 
-		case WIDGET_FILE: ?>
-					<input type="file" id="<?php echo $key;?>" name="<?php echo $key;?>">
-				<?php  if(isset($field['path'])) {
-					$img = getImg($field['path'], $id);
-					if($img) {
-						echo "<br><img src='" . $img ."' class=thumb>";
-					}
-				}
-				break;
-
 	} ?>
 	<label for="<?php echo $key;?>"></label>
+	<?php if ($widget == WIDGET_CHECKBOX ) echo T($key) . ($required ? "<sup>*</sup>":'');?>
 	</td>
 	</tr>
+
+	<?php if($split == $key) { ?>
+		</table>
+		</div>
+		<div class="half half2">
+		<table>
+	<?php } ?>
 <?php }?>
 
 <script>

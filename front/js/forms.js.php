@@ -32,6 +32,15 @@ $( document ).ready(function() {
         });
 	});
 
+
+
+	  $(window).keydown(function(event){
+	    if(event.keyCode == 13) {
+	      event.preventDefault();
+				sendFormById();
+	      return false;
+	    }
+	  });
 	/*
 	$("#form").submit(function(e){ sendForm(); return false; });
 	$('.submit').click(function(e) {  sendForm(); return false; });

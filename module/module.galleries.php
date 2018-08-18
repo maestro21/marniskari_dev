@@ -15,6 +15,7 @@ class galleries extends masterclass  {
   	}
 
     function extend() {
+        M('pages')->view(getLang() . '/gallery');
         $this->description = 'Galleries';
     }
 
@@ -36,7 +37,7 @@ class galleries extends masterclass  {
       if($this->files['img']) {
         uploadImage($this->files['img'], 'galleries/' . $this->id . '/' . uniqid());
       }
-      return json_encode(['status' => 'ok']);
+      return json_encode(['status' => 'ok' , 'message' => T('saved'), 'redirect'=> 'self']);
     }
 
     function view() {
@@ -51,6 +52,12 @@ class galleries extends masterclass  {
       fm()->drm(BASEFMDIR . 'galleries/' . $this->id);
       unlink(BASEFMDIR .  'galleries/' . $this->id . '.jpeg');
       parent::del();
+    }
+
+    function delimg() {
+      $path = BASEFMDIR . 'galleries/' . $this->path[2] . '/' . $this->path[3];
+      unlink($path);
+      echo json_encode(['status' => 'ok' , 'message' => T('deleted'), 'redirect'=> 'self']); die();
     }
 
 }

@@ -18,7 +18,21 @@
 <?php } ?>
 
 <div class=gallery>
-<?php foreach($data['images'] as $img) { ?>
-      <div class="img" style="background-image:url('<?php echo BASEFMURL . 'galleries/' . $id . '/' . $img['name'];?>');"></div>
+<?php $images = array_reverse($data['images']);
+foreach($images as $img) { ?>
+		<div class="img" style="background-image:url('<?php echo BASEFMURL . 'galleries/' . $id . '/' . $img['name'];?>');">
+			<?php if(superAdmin()) { ?>
+				<p class='admBtns'>
+					<span href="javascript:void(0)" onclick="conf('<?php echo BASE_URL.$class;?>/delimg/<?php echo  $id . '/' . $img['name'];?>', '<?php echo T('del conf');?>')" class="fa-trash-o fa icon icon_sml"></span>
+				</p>
+			<?php } ?>
+			<a href="<?php echo BASEFMURL . 'galleries/' . $id . '/' . $img['name'];?>" rel="shadowbox[gal]" class="noanim">
+					<div></div>
+			</a>
+		</div>
 <?php } ?>
 </div>
+
+<script>
+Shadowbox.init();
+</script>

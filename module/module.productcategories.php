@@ -24,10 +24,10 @@
 		$form = $this->post['form'];
 		$ret = parent :: saveDB($form);
 		if($this->files['logo']) {
-			uploadImage($this->files['logo'], 'productcategories/logo/' . $this->id);
+			uploadImage($this->files['logo'], 'productcategories/logo/' . $this->id, [100, 29], null, 1);
 		}
     if($this->files['img']) {
-      uploadImage($this->files['img'], 'productcategories/img/' . $this->id, [270, 170]);
+      uploadImage($this->files['img'], 'productcategories/img/' . $this->id, [170, 270]);
     }
 		return json_encode($ret);
 	}

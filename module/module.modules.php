@@ -28,8 +28,7 @@
 	}
 
 
-	function reinstall() {
-		if(!superAdmin()) return;
+	function reinstall() { return;
 		$this->install();
 		$modules = $this->getModules();
 		foreach($modules as $module) {
@@ -52,6 +51,7 @@
 	}
 
 	function admin() {
+		redirect(BASE_URL);
 		if(!superAdmin()) return;
 		if(hasRight($this->rights['admin'])) {
 			/** getting items from db **/
@@ -107,6 +107,7 @@
 	}
 
 	function items() {
+		redirect(BASE_URL);
 		return cache($this->className);
 	}
 

@@ -16,13 +16,13 @@
 <div id="tags">
   <ul>
     <?php foreach($data as $row) {
-      for($i = 0; $i < 10; $i++) { $id = $row['id'];?>
+     $id = $row['id'];?>
          <li>
            <a href="<?php echo BASE_URL . 'products/category/' .$id;?>">
              <img class="logo"src="<?php echo getImg('productcategories/logo', $id);?>">
            </a>
          </li>
-      <?php }
+      <?php
     }?>
   </ul>
 </div>

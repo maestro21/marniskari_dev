@@ -192,7 +192,7 @@ function delG($name) {
 
 
 function T($text, $number = 1, $addnumber = false, $ucfirst = false) {
-	$_text = $text;
+	$_text = ucfirst($text);
 	$labels = S('labels');
 	$lang = getLang();
 	if(!isset($labels[$text])) {
@@ -464,12 +464,32 @@ const DB_DATE 	= 'date';
 const DB_FLOAT 	= 'float';
 
 
+
+function randomanimation() {
+	$animations = [
+		'fade-out',
+		'fade-out-down-sm',
+		'fade-out-up-sm',
+		'fade-out-left-sm',
+		'fade-out-right-sm',
+		'rotate-out-sm',
+		'overlay-slide-out-top',
+		'overlay-slide-out-bottom',
+		'overlay-slide-out-left',
+		'overlay-slide-out-right'
+	];
+
+	return 	$animations[array_rand($animations)];
+}
+
 function drawForm($fields,$data = array(),$options = array(), $split = false){
 	Hset('validate');
 	return tpl('form', array( 'data' => $data, 'fields' => $fields, 'options' => $options , 'split' => $split));
 }
 
 function fType($value, $type, $options = null, $fieldname = null) {
+	if($value == null) return;
+
 	switch($type) {
 
 		case WIDGET_NUMBER:
@@ -707,69 +727,6 @@ function loadClass($cl,$clname=''){
 	return $class;
 }
 
-function createthumb($name,$filename,$new_w,$new_h,$type){
-
-	switch($type){
-		case 'image/jpg':
-		case 'image/jpeg':
-			$src_img=imagecreatefromjpeg($name); $type = "jpg";
-		break;
-
-		case 'image/gif':
-			$src_img=imagecreatefromgif($name); $type = "gif";
-		break;
-
-		case 'image/png':
-			$src_img=imagecreatefrompng($name); $type = "png";
-		break;
-	}
-
-	//size of src image
-	$orig_w = imagesx($src_img);
-	$orig_h = imagesy($src_img);
-
-
-	$w_ratio = ($new_w / $orig_w);
-	$h_ratio = ($new_h / $orig_h);
-
-	if ($orig_w > $orig_h ) {//landscape
-		$crop_w = round($orig_w * $h_ratio);
-		$crop_h = $new_h;
-		$src_x = ceil( ( $orig_w - $orig_h ) / 2 );
-		$src_y = 0;
-	} elseif ($orig_w < $orig_h ) {//portrait
-		$crop_h = round($orig_h * $w_ratio);
-		$crop_w = $new_w;
-		$src_x = 0;
-		$src_y = ceil( ( $orig_h - $orig_w ) / 2 );
-	} else {//square
-		$crop_w = $new_w;
-		$crop_h = $new_h;
-		$src_x = 0;
-		$src_y = 0;
-	}
-	$dest_img = imagecreatetruecolor($new_w,$new_h);
-	imagecopyresampled($dest_img, $src_img, 0 , 0 , $src_x, $src_y, $crop_w, $crop_h, $orig_w, $orig_h);
-
-	switch($type){
-		case 'jpg': imagejpeg($dest_img,$filename);  break;
-		case 'gif': imagegif($dest_img,$filename);  break;
-		case 'png': imagepng($dest_img,$filename); break;
-	}
-
-	imagedestroy($dest_img);
-	imagedestroy($src_img);
-}
-
-
-function getthumb($img, $dir){
-	$thumbpath = BASEFMDIR .  $dir . '/' . THUMB_PREFIX . $img;
-	$thumburl = BASEFMURL .  $dir . '/' . THUMB_PREFIX . $img;
-	if(file_exists($thumbpath))
-		echo " style=\"background-image:url('$thumburl');background-position-x: 0;\"";
-
-
-}
 
 function BB($text)	{
 		//inspect($text);
@@ -1237,7 +1194,7 @@ function uploadFile($file, $path) {
 	move_uploaded_file($tmpname, $path);
 }
 
-function uploadImage($file, $path, $imgsize = null, $thumb = null) {
+function uploadImage($file, $path, $imgsize = null, $thumb = null, $option = 'crop') {
 		$tmpname = $file["tmp_name"];
 		$type = explode('/',$file['type']);
 		if($type[0] != 'image') {
@@ -1248,14 +1205,92 @@ function uploadImage($file, $path, $imgsize = null, $thumb = null) {
 
 		uploadFile($file, $path);
 
+
 		if(is_array($imgsize)) {
-				createthumb($path, $path, $imgsize[0], $imgsize[1], $type);
+				createthumb($path, $path, $imgsize[0], $imgsize[1], $option);//, $type);
 		}
-		if($thumb) {
+		if($thumb && $thumb['path']) {
 				$thumbpath = BASEFMDIR .  $thumb['path'] . '.' . $type;
-				createthumb($path, $thumbpath, $thumb['x'], $thumb['y'], $type);
+				createthumb($path, $thumbpath, $thumb['x'], $thumb['y']);//, $type);
 		}
+		return [
+			'img' => $path,
+			'thumb' => $thumbpath ?? null,
+			'type' => $type
+		];
 }
+
+
+
+function createThumb($in, $out, $sizex, $sizey, $option = 'crop') {
+	$magicianObj = new imageLib($in);
+	//print_r($in . ' ' . $out . ' ' . $sizex . ' '  . $sizey);
+	$magicianObj -> resizeImage($sizex, $sizey, $option);
+	$magicianObj -> saveImage($out);
+}
+/*
+function createThumb($name,$target, $thumb_width, $thumb_height, $type, $newtype = null) {
+	switch($type){
+		case 'image/jpg':
+		case 'image/jpeg':
+			$src_img=imagecreatefromjpeg($name); $type = "jpg";
+		break;
+
+		case 'image/gif':
+			$src_img=imagecreatefromgif($name); $type = "gif";
+		break;
+
+		case 'image/png': print_r($name);
+			$src_img=imagecreatefrompng($name); $type = "png";
+		break;
+	}
+	if($newtype == NULL) $newtype = $type;
+	$width = imagesx($src_img);
+	$height = imagesy($src_img);
+	$original_aspect = $width / $height;
+	$thumb_aspect = $thumb_width / $thumb_height;
+	if ( $original_aspect >= $thumb_aspect )
+	{
+	   // If image is wider than thumbnail (in aspect ratio sense)
+	   $new_height = $thumb_height;
+	   $new_width = $width / ($height / $thumb_height);
+	}
+	else
+	{
+	   // If the thumbnail is wider than the image
+	   $new_width = $thumb_width;
+	   $new_height = $height / ($width / $thumb_width);
+	}
+
+	$thumb = imagecreatetruecolor( $thumb_width, $thumb_height );
+	// Resize and crop
+	imagecopyresampled($thumb,
+					   $src_img,
+					   0 - ($new_width - $thumb_width) / 2, // Center the image horizontally
+					   0 - ($new_height - $thumb_height) / 2, // Center the image vertically
+					   0, 0,
+					   $new_width, $new_height,
+					   $width, $height);
+print_r($target);
+	switch($newtype){
+		case 'jpg': imagejpeg($thumb,$target);  break;
+		case 'gif': imagegif($thumb,$target);  break;
+	//	case 'png': imagepng($thumb,$target); break;
+	}
+
+	imagedestroy($thumb);
+	imagedestroy($src_img);
+}
+
+
+function getthumb($img, $dir){
+	$thumbpath = BASEFMDIR .  $dir . '/' . THUMB_PREFIX . $img;
+	$thumburl = BASEFMURL .  $dir . '/' . THUMB_PREFIX . $img;
+	if(file_exists($thumbpath))
+		echo " style=\"background-image:url('$thumburl');background-position-x: 0;\"";
+
+
+}*/
 
 function getImg($path, $id) {
 	$types = ['jpeg', 'jpg', 'gif', 'png'];
@@ -1270,4 +1305,10 @@ function getImg($path, $id) {
 
 function bgImg() {
 		return G('bgimg');
+}
+
+
+function preparelang($lang) {
+	$lang = str_replace('.png', '',  $lang);
+	return ucwords(str_replace('-',' ', $lang));
 }

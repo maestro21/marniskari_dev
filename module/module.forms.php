@@ -1,36 +1,36 @@
 <?php class forms extends masterclass {
-	
+
 	function gettables() {
-		return 
+		return
 		[
 			'forms' => [
-				'fields' => [					
+				'fields' => [
 					'name'	=> 	[ 'string', 'text', 'search' => TRUE, 'required' => TRUE ],
-					'fields' => [ 'text', 'array' ],					
+					'fields' => [ 'text', 'array' ],
 					'split' => [ 'text', 'text' ],
 					'sendmail' => [ 'bool' , 'checkbox' ],
 					'mail_topic' => [ 'string' , 'text' ],
-					
+
 				],
 			],
 			'forms_messages' => [
-				'fields' => [					
+				'fields' => [
 					'form_id'	=> 	[ 'int', 'hidden', 'index' => TRUE ],
 					'data' => [ 'text', 'array' ],
 					'sent' => [ DB_DATE , WIDGET_DATE],
-					
+
 				],
 				'fk' => [
 					'form_id' => 'forms(id)'
 				],
 			],
-		];		
+		];
 	}
-	
+
 	function extend() {
 		$this->options['widgets'] = [
-			WIDGET_TEXT 		=> WIDGET_TEXT, 
-			WIDGET_TEXTAREA 	=> WIDGET_TEXTAREA, 
+			WIDGET_TEXT 		=> WIDGET_TEXT,
+			WIDGET_TEXTAREA 	=> WIDGET_TEXTAREA,
 			WIDGET_HTML 		=> WIDGET_HTML,
 			WIDGET_BBCODE 		=> WIDGET_BBCODE,
 			WIDGET_PASS 		=> WIDGET_PASS,
@@ -49,32 +49,39 @@
 			WIDGET_PHONE		=> WIDGET_PHONE,
 			WIDGET_SLUG			=> WIDGET_SLUG,
 		];
-		
+
 		$this->options['dbtypes'] = [
 			DB_TEXT 	=> DB_TEXT,
 			DB_BLOB 	=> DB_BLOB,
 			DB_STRING 	=> DB_STRING,
-			DB_BOOL 	=> DB_BOOL, 
-			DB_INT 		=> DB_INT, 
-			DB_DATE 	=> DB_DATE, 
-			DB_FLOAT 	=> DB_FLOAT	
+			DB_BOOL 	=> DB_BOOL,
+			DB_INT 		=> DB_INT,
+			DB_DATE 	=> DB_DATE,
+			DB_FLOAT 	=> DB_FLOAT
 		];
-		
+
 		$this->buttons['admin']['messages'] = 'fa-commenting';
 	}
 
-	
-	
+
+
 	function getDescription() {
 		return 'Module for form creation and management';
 	}
-	
-	
-	
+
+	function delmsg() {
+			$this->ajax = true;
+			if(!superAdmin()) return;
+		 q('forms_messages')->qdel( $this->id)->run();
+		 echo json_encode(array('redirect' => 'self', 'status' => 'ok', 'timeout' => 1));
+		 die();
+	}
+
+
 	function addField($key = null, $data = null) {
-		$this->ajax = true;	
-		
-		
+		$this->ajax = true;
+
+
 		return tpl('forms/field', array(
 			'key' => $key,
 			'types' => $this->options['dbtypes'],
@@ -99,17 +106,17 @@
 		}
 		$data['fields'] = $fields;
 		$data['id'] = $id;
-		
+
 		return $data;
-	}	
-	
-	function post() { 
+	}
+
+	function post() {
 		$this->ajax = true;
-		
+
 		$formid = $this->post['id'];
 		$form = q('forms')->qget($formid)->run();
 		$fields = unserialize($form['fields']);
-		$fdata = array(); 
+		$fdata = array();
 		foreach($this->post['form'] as $k => $v) {
 			$dbtype = getFieldDBType($k, $fields);
 			$fdata[$k] = sqlFormat($dbtype, $v);
@@ -122,7 +129,7 @@
 			'sent' =>   now() ,
 		];
 		q('forms_messages')->qadd($data)->run();
-		
+
 		if($form['sendmail']) {
 			$data = [
 				'subject' => $form['mail_topic'],
@@ -133,60 +140,60 @@
 			//print_r($data);
 			sendMail($data);
 		}
-		
-		echo json_encode(array('message' => T('form_submitted'), 'status' => 'ok'));	die();	
+
+		echo json_encode(array('redirect' => 'self', 'message' => T('form_submitted'), 'status' => 'ok', 'timeout' => 3000));	die();
 	}
-	
+
 	function messages() {
 		$qMsg = q('forms_messages')->qlist()->order('sent desc');
 		/*if($this->id > 0) {
 			$qMsg->where(qEq('form_id', $this->id));
 		}
 		return $qMsg->run();*/
-		
+
 		$qForm = q('forms')->qlist();
-		
+
 		if($this->id > 0) {
 			$qMsg->where(qEq('form_id', $this->id));
-			$qForm->where(qEq('id', $this->id));	
+			$qForm->where(qEq('id', $this->id));
 		}
 		$forms = array();
 		$_forms = $qForm->run();
 		foreach($_forms as $form) {
 			$forms[$form['id']] = unserialize($form['fields']);
 		}
-		
-		$messages = $qMsg->run(); 
-		
+
+		$messages = $qMsg->run();
+
 		$data = [
 			'forms' => $forms,
 			'messages' => $messages
 		];
-		
-		return $data;
-		
-	}
 
-		
+		return $data;
+
+	}
 }
 
 
-function getFieldDBType($key, $fields) { //inspect($fields); 
 
-	foreach($fields as $field) { 
+
+function getFieldDBType($key, $fields) { //inspect($fields);
+
+	foreach($fields as $field) {
 		if($field['name'] == $key) {;
 			return $field['type'];
 		}
-	}	
+	}
 	return 'text';
 }
 
-function getFieldType($key, $fields) { //inspect($fields); 
+function getFieldType($key, $fields) { //inspect($fields);
 
-	foreach($fields as $field) { 
+	foreach($fields as $field) {
 		if($field['name'] == $key) {;
 			return $field['widget'];
 		}
-	}	
+	}
 	return 'text';
 }

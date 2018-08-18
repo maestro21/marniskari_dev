@@ -49,7 +49,7 @@ h1,h2,h3,h4,h5,h6,
 .menu a, .submenu a
 {
 	font-family: Roboto;
-	font-weight: 100;
+	font-weight: 100 !important;
     color: white;
 }
 body {
@@ -1048,6 +1048,7 @@ height: 20px;
 	border-radius: 50%;
 }
 
+.flag,
 .langs img,
 .flags img {
 	width: 28px;
@@ -1640,7 +1641,7 @@ border: 0.5px  rgba(255,255,255,0.5) solid !important;
 }
 
 
-.gallery div {
+.gallery .img {
     width: 341px;
     height: 200px;
     background-position: center;
@@ -1650,6 +1651,11 @@ border: 0.5px  rgba(255,255,255,0.5) solid !important;
     margin: 10px;
     opacity: 0.8;
     border: 1px white solid;
+}
+
+.gallery .img div {
+  width: 341px;
+  height: 200px;
 }
 
 .galleries div:hover,
@@ -1688,13 +1694,141 @@ border: 0.5px  rgba(255,255,255,0.5) solid !important;
     color: white;
     background-color: rgba(0,0,0,0.5);
     font-size: 30px;
+    font-weight: 200;
 }
 
 .productcategories {
       text-align: center;
 }
 
+
 .productcategories p.admBtns {
     position: absolute;
     margin-top: -10px;
+}
+
+.productcategories img.logo {
+    max-height: 30px;
+}
+
+.products  p.admBtns{
+  position: absolute;
+      margin-left: 150px;
+}
+
+.productlist {
+  text-align: center;
+}
+
+.productlist table {
+    width: 300px;
+}
+
+.btn.sml {
+    font-size: 12px;
+    padding: 5px 25px;
+}
+
+.productimg {
+  max-width: 150px;
+  max-height: 640px;
+}
+
+.content h1 {
+    margin-top: 0;
+    padding: 0;
+}
+
+
+* {
+  font-size: 1.8vmin;
+}
+
+.menu a {
+  font-size: 20px;
+  font-family: Roboto;
+  text-transform: capitalize;
+}
+
+.menu a.active, .menu a:hover {
+    background-color: white !important;
+    color: black;
+    transition: background-color 2000ms linear;
+}
+
+ h1 {
+    display: block;
+    color: white;
+    text-shadow: 1px 1px 0px black;
+    display: block;
+    text-align: center;
+    font-size: 5em;
+    margin: 0.3em auto;
+    font-weight: 100;
+    text-transform: capitalize;
+    font-family: Roboto;
+}
+
+*, a *, a, .adminpanel a {
+  font-family: Roboto;
+  font-weight: 100;
+}
+
+.langs * {
+  font-weight: 100 !important;
+}
+
+.langs .topmenu a:hover {
+    background-color: white !important;
+    color: black !important;
+    transition: background-color 500ms linear;
+}
+.langs .topmenu a:hover * {
+  color: black !important;
+}
+
+.langs img {
+  padding: 3px;
+}
+
+.langs a:hover img, .langs .curr_lang img {
+    border: 1px white solid;
+    border-radius: 50%;
+    padding: 2px;
+    opacity: 1;
+}
+
+
+.message p.admBtns {
+      position: absolute;
+}
+
+select, input, textarea {
+    color: rgba(255,255,255,0.7);
+    border: 1px rgba(255,255,255,0.7) solid;
+    background-color: rgba(0,0,0,0.3);
+    padding: 5px 10px;
+}
+
+.productinfo {
+  vertical-align: middle !important;
+  font-weight: 100;
+}
+.productinfo * {
+    font-weight: 100 !important
+}
+.product {
+  margin-top: -150px;
+}
+
+.product p {
+  font-size: 1.5em;
+  line-height: 1.5em;
+}
+input[type="checkbox"]  {
+  width: 25px !important;
+}
+
+input[type="checkbox"] + label:before {
+  display: none !important;
 }

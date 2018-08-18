@@ -77,7 +77,7 @@
 	function getPageTree($options = null) {
 		$q = q()	->select('id, pid, name, url, fullurl')
 					->from($this->className)
-					->order('pid ASC, id ASC');
+					->order('pid ASC, pos ASC');
 		if(@$options['id'] > 0) {
 			$q->where('id != ' . $options['id']);
 		}

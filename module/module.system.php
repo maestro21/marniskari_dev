@@ -66,7 +66,7 @@
 
 	function cache($data = NULL) {
 		$cache 	= array();
-		$data 	= q($this->cl)->qlist()->run();
+		$data 	= q($this->cl)->qlist()->limit(0,10000)->run();;
 		foreach($data as $row){
 			$cache[$row['name']] = $row['value'];
 		}
